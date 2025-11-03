@@ -8,4 +8,5 @@
   --color-accent: #5467cf;
   --font-inter: 'Inter', sans-serif;
   --font-poppins: 'Poppins', sans-serif;
+  --shadow-uniform: 0 2px 10px var(--color-secondary);
 }

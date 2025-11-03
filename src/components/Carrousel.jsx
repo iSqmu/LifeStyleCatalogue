@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,10 +11,10 @@ import { transition } from '@cloudinary/url-gen/actions/effect';
 
 function Carrousel({ images }) {
   const [index, setIndex] = useState(0);
-  const [timer, setTimer] = useState(3000);
   const [direction, setDirection] = useState('right');
   const prevIndex = index === 0 ? images.length - 1 : index - 1;
   const nextIndex = index === images.length - 1 ? 0 : index + 1;
+
   const slideVariants = {
     moveLeft: {
       x: '100%',
@@ -60,19 +60,13 @@ function Carrousel({ images }) {
 
   function handleNext() {
     setDirection('right');
-    setTimer(3000);
-    console.log(direction);
     index + 1 === images.length ? setIndex(0) : setIndex(index + 1);
   }
+  
   function handlePrev() {
     setDirection('left');
-    console.log(direction);
     index - 1 < 0 ? setIndex(images.length - 1) : setIndex(index - 1);
   }
-
-  setTimeout(() => {
-    handleNext();
-  }, timer);
 
   return (
     <div className="carrousel bg-tertiary w-full flex flex-col justify-center items-center overflow-hidden py-5">
