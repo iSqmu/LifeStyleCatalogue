@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Carrousel from '../components/Carrousel';
+import Catalogues from '../components/Catalogues';
 import Imagenes from '../assets/imagenes';
 import '../catalogue.css';
 function Catalogue() {
@@ -65,6 +66,7 @@ function Catalogue() {
           </div>
         </div>
       </div>
+      <Catalogues />
     </>
   );
 }

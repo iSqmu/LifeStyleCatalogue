@@ -62,16 +62,16 @@ function Carrousel({ images }) {
     setDirection('right');
     index + 1 === images.length ? setIndex(0) : setIndex(index + 1);
   }
-  
+
   function handlePrev() {
     setDirection('left');
     index - 1 < 0 ? setIndex(images.length - 1) : setIndex(index - 1);
   }
 
   return (
-    <div className="carrousel bg-tertiary w-full flex flex-col justify-center items-center overflow-hidden py-5">
+    <div className="carrousel bg-tertiary w-dvw flex flex-col justify-center items-center overflow-hidden py-5">
       <div className="carrousel-title text-2xl font-poppins text-primary">
-        <h4>
+        <h4 className="text-center">
           ¡Bienvenido al catálogo de{' '}
           <span className="text-accent font-bold">LIFE STYLE</span>!
         </h4>
