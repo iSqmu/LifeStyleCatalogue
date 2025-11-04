@@ -69,7 +69,7 @@ function Carrousel({ images }) {
   }
 
   return (
-    <div className="carrousel bg-tertiary w-dvw flex flex-col justify-center items-center overflow-hidden py-5">
+    <div className="carrousel bg-tertiary w-full flex flex-col justify-center items-center overflow-hidden py-5">
       <div className="carrousel-title text-2xl font-poppins text-primary">
         <h4 className="text-center">
           ¡Bienvenido al catálogo de{' '}
