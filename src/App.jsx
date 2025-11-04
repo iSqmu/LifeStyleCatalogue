@@ -14,7 +14,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/catalogue" element={<Catalogue />} />
+      <Route path="/" element={<Catalogue />} />
     </Routes>
   );
 }
