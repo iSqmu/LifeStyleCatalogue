@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './firebase.js';
 import Catalogue from './routes/Catalogue.jsx';
+import Login from './routes/Login.jsx';
+import Dashboard from './routes/Dashboard.jsx';
 import './index.css';
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Catalogue />} />
+      <Route path="/login" element={!user ? <Login /> : <Catalogue />} />
+      <Route path="/admin" element={user ? <Dashboard /> : <Login />} />
     </Routes>
   );
 }

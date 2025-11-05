@@ -9,6 +9,7 @@ import {
   query,
 } from 'firebase/firestore';
 import { db } from '../firebase';
+import '../catalogue.css';
 import Product from './Product';
 
 function ClothesCatalogue() {
@@ -20,12 +21,16 @@ function ClothesCatalogue() {
     });
     return unsub;
   }, []);
-  console.log(productos);
   return (
     <div className="productos">
-      {productos.map((p) => (
-        <Product key={p.id} producto={p} />
-      ))}
+      <h1 className="text-3xl font-bold text-accent mb-5">
+        Catálogo de Ropa Deportiva.
+      </h1>
+      <div className="grid cards gap-5">
+        {productos.length == 0
+          ? 'No hay productos en este catálogo'
+          : productos.map((p) => <Product key={p.id} producto={p} />)}
+      </div>
     </div>
   );
 }
