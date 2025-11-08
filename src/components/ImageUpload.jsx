@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
-function ImageUpload({ onUpload }) {
+function ImageUpload({ onUpload, editing }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
 
@@ -55,7 +55,7 @@ function ImageUpload({ onUpload }) {
           className="h-full w-full cursor-pointer opacity-0 z-3"
           onChange={handleUpload}
           disabled={uploading}
-          required
+          required={editing ? false : true}
         />
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>

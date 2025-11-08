@@ -1,18 +1,65 @@
-import React, { useEffect, useState} from 'react';
+// routes/Clothes.jsx
+import React, { useEffect, useState } from 'react';
 import {
-    collection,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
+  collection,
   onSnapshot,
   query,
+  deleteDoc,
+  doc,
 } from 'firebase/firestore';
 import { db } from '../firebase';
+import Product from '../components/Product';
 
+function Clothes({ onEdit, onDelete }) {
+  const [productos, setProductos] = useState([]);
 
-function Clothes() {
-  return <h1>Clothes</h1>;
+  useEffect(() => {
+    const q = query(collection(db, 'clothes'));
+    const unsub = onSnapshot(q, (snapshot) => {
+      setProductos(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
+    });
+    return unsub;
+  }, []);
+
+  const handleEdit = (product) => {
+    onEdit(product);
+  };
+
+  const handleDelete = async (id) => {
+    if (confirm('¿Seguro que quieres eliminar este producto?')) {
+      try {
+        await deleteDoc(doc(db, 'clothes', id));
+        alert('Producto eliminado');
+      } catch (err) {
+        alert('Error al eliminar');
+      }
+    }
+  };
+
+  return (
+    <div className="productos px-5 py-8">
+      <h1 className="text-3xl font-bold text-accent mb-6">
+        Catálogo de Ropa Deportiva
+      </h1>
+      <div className="grid cards gap-6 p-5">
+        {productos.length === 0 ? (
+          <p className="col-span-full text-center text-gray-500">
+            No hay productos en este catálogo
+          </p>
+        ) : (
+          productos.map((p) => (
+            <Product
+              key={p.id}
+              producto={p}
+              editable={true}
+              onEdit={() => handleEdit(p)}
+              onDelete={() => handleDelete(p.id)}
+            />
+          ))
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default Clothes;

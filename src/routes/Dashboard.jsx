@@ -30,9 +30,6 @@ function Dashboard() {
   const [path, setPath] = useState('clothes');
   const [editingId, setEditingId] = useState(null);
   const [activeTab, setActiveTab] = useState('clothes');
-  const [clothesProducts, setClothesProducts] = useState([]);
-  const [supplementsProducts, setSupplementsProducts] = useState([]);
-  const [offers, setOffers] = useState([]);
 
   const navigate = useNavigate();
 
@@ -96,28 +93,13 @@ function Dashboard() {
     }
   }
 
-  function editProduct(product, currentPath) {
-    setNombre(product.nombre);
-    setPrecio(product.precio);
-    setDescripcion(product.descripcion);
-    setImageURL(product.imageURL);
-    setStatus(product.status);
-    setPath(currentPath);
-    setEditingId(product.id);
-  }
-
-  async function deleteProduct(id, currentPath) {
-    if (confirm('¿Eliminar este producto?')) {
-      await deleteDoc(doc(db, currentPath, id));
-    }
-  }
-
   function resetForm() {
     setNombre('');
     setPrecio('');
     setDescripcion('');
     setImageURL('');
     setStatus('');
+    setEditingId(null);
   }
 
   function logOut() {
@@ -128,6 +110,15 @@ function Dashboard() {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  function handleEdit(product) {
+    setNombre(product.nombre);
+    setPrecio(product.precio);
+    setDescripcion(product.descripcion);
+    setImageURL(product.imageURL);
+    setStatus(product.status);
+    setEditingId(product.id);
   }
 
   return (
@@ -222,7 +213,7 @@ function Dashboard() {
                 <option value="agotado">Agotado</option>
               </select>
               <div className="upload w-full flex justify-center gap-5">
-                <ImageUpload onUpload={setImageURL} />
+                <ImageUpload onUpload={setImageURL} editing={editingId}/>
                 {imageURL && (
                   <div className="mt-3 flex flex-col justify-center">
                     Previsualización:
@@ -255,8 +246,12 @@ function Dashboard() {
           )}
         </form>
         <div className="elements-shop">
-          {activeTab === 'clothes' && <Clothes />}
-          {activeTab === 'supplements' && <Supplements />}
+          {activeTab === 'clothes' && (
+            <Clothes onEdit={handleEdit} onDelete={() => {}} />
+          )}
+          {activeTab === 'supplements' && (
+            <Supplements onEdit={handleEdit} onDelete={() => {}} />
+          )}
           {activeTab === 'offers' && <Offers />}
         </div>
         <button
