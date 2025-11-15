@@ -3,7 +3,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-function Product({ producto, editable, onEdit, onDelete }) {
+function Product({ producto, editable, onEdit, onDelete, type }) {
   const status = producto.status || 'agotado';
   const StatusIcons = {
     stock:

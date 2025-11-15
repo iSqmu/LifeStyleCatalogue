@@ -3,18 +3,30 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import Swal from 'sweetalert2';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+  });
   async function handleLogin(e) {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/admin');
+      Toast.fire({
+        icon: "success",
+        title: "Se ha ingresado correctamente"
+      })
+      
+      navigate('/admin')
     } catch (err) {
       setError('Error en login: ' + err.message);
     }

@@ -22,7 +22,7 @@ function SupplementsCatalogue() {
   return (
     <div className="productos">
       <h1 className="text-3xl font-bold text-accent mb-5">
-        Catálogo de Ropa Deportiva.
+        Catálogo de Suplementos.
       </h1>
       {productos.length == 0
         ? 'No hay productos en este catálogo'

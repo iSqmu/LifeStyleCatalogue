@@ -17,7 +17,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Catalogue />} />
-      <Route path="/login" element={!user ? <Login /> : <Catalogue />} />
+      <Route path="/login" element={!user ? <Login /> : <Dashboard />} />
       <Route path="/admin" element={user ? <Dashboard /> : <Login />} />
     </Routes>
   );

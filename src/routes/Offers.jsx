@@ -48,6 +48,7 @@ function Offers({ onEdit, onDelete }) {
             <Product
               key={p.id}
               producto={p}
+              // type="offer"
               editable={true}
               onEdit={() => handleEdit(p)}
               onDelete={() => handleDelete(p.id)}

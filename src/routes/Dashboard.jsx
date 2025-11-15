@@ -18,6 +18,7 @@ import ImageUpload from '../components/ImageUpload';
 import Clothes from './clothes';
 import Offers from './Offers';
 import Supplements from './Supplements';
+import Swal from 'sweetalert2';
 
 function Dashboard() {
   const [productosClothes, setProductosClothes] = useState([]);
@@ -30,6 +31,13 @@ function Dashboard() {
   const [path, setPath] = useState('clothes');
   const [editingId, setEditingId] = useState(null);
   const [activeTab, setActiveTab] = useState('clothes');
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true
+  })
 
   const navigate = useNavigate();
 
@@ -60,9 +68,10 @@ function Dashboard() {
     };
   }, []);
 
+
   async function handleSubmit(e) {
     e.preventDefault();
-
+    
     const data = {
       nombre,
       precio: parseFloat(precio),
@@ -83,9 +92,10 @@ function Dashboard() {
       } else {
         await addDoc(collection(db, path), data);
       }
-      alert(
-        `Producto ${nombre} guardado correctamente en el catálogo de ${path}`
-      );
+      Toast.fire({
+        icon: "success",
+        title: `Producto "${data.nombre}" añadido correctamente al catálogo "${path}"`
+      })
       resetForm();
     } catch (err) {
       console.error('Error al guardar:', error);
@@ -120,6 +130,8 @@ function Dashboard() {
     setStatus(product.status);
     setEditingId(product.id);
   }
+
+  
 
   return (
     <>
@@ -169,7 +181,11 @@ function Dashboard() {
                       className="h-25 object-cover rounded-lg"
                     />
                   </div>
+                  
                 )}
+                {
+                  setNombre('Oferta')
+                }
               </div>
             </>
           ) : (

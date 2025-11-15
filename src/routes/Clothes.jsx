@@ -9,6 +9,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import Product from '../components/Product';
+import Swal from 'sweetalert2';
 
 function Clothes({ onEdit, onDelete }) {
   const [productos, setProductos] = useState([]);
@@ -26,15 +27,50 @@ function Clothes({ onEdit, onDelete }) {
   };
 
   const handleDelete = async (id) => {
-    if (confirm('¿Seguro que quieres eliminar este producto?')) {
-      try {
-        await deleteDoc(doc(db, 'clothes', id));
-        alert('Producto eliminado');
-      } catch (err) {
-        alert('Error al eliminar');
-      }
+    try {
+      await deleteDoc(doc(db, 'clothes', id));
+      Toast.fire({
+        icon: "success",
+        title: "Elemento eliminado correctamente"
+      })
+    } catch(error) {
+      Toast.fire({
+        icon: "error",
+        title: error
+      })
     }
   };
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  })
+  
+  
+
+  function warningSwal(id) {
+    Swal.fire({
+      title: '¿Estás seguro de eliminar este elemento?',
+      text: 'No podrás reveritrlo después',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#5467CF',
+      cancelButtonColor: '#FB2C36',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Si, borrar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(id);
+      }
+    });
+  }
 
   return (
     <div className="productos px-5 py-8">
@@ -53,7 +89,7 @@ function Clothes({ onEdit, onDelete }) {
               producto={p}
               editable={true}
               onEdit={() => handleEdit(p)}
-              onDelete={() => handleDelete(p.id)}
+              onDelete={() => warningSwal(p.id)}
             />
           ))
         )}
