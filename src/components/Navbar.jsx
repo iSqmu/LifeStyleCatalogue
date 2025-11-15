@@ -16,7 +16,7 @@ function Navbar({ page, links, activeTab, onTabChange, type }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* LOGO + TÍTULO */}
-          <a href="/" className="flex items-center space-x-3 flex-shrink-0">
+          <a href="/" className="flex items-center space-x-3 shrink-0">
             <img src={logo} alt="Lifestyle Logo" className="h-10 w-10" />
             <div className="flex items-center space-x-2">
               <h2 className="text-lg sm:text-xl font-bold font-inter">
@@ -30,16 +30,17 @@ function Navbar({ page, links, activeTab, onTabChange, type }) {
           </a>
 
           {/* BOTÓN HAMBURGUESA (móvil) */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 rounded-md hover:bg-accent/50 transition cursor-pointer"
-          >
-            <FontAwesomeIcon
-              icon={isOpen ? faTimes : faBars}
-              className="text-xl"
-            />
-          </button>
-
+          {links && (
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="lg:hidden p-2 rounded-md hover:bg-accent/50 transition cursor-pointer"
+            >
+              <FontAwesomeIcon
+                icon={isOpen ? faTimes : faBars}
+                className="text-xl"
+              />
+            </button>
+          )}
           {/* ENLACES (desktop) */}
           <ul className="hidden lg:flex items-center space-x-2">
             {links?.map((link) => {
