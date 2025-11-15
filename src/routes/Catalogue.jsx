@@ -1,4 +1,12 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
+import {
+  collection,
+  onSnapshot,
+  query,
+  deleteDoc,
+  doc,
+} from 'firebase/firestore';
+import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import Carrousel from '../components/Carrousel';
 import Catalogues from '../components/Catalogues';
@@ -6,11 +14,11 @@ import Footer from '../components/Footer';
 import Imagenes from '../assets/imagenes';
 import '../catalogue.css';
 function Catalogue() {
-  const slideImages = [Imagenes.img3, Imagenes.img1, Imagenes.img2];
+
   return (
     <>
       <Navbar page="CATÁLOGO" />
-      <Carrousel images={slideImages} />
+      <Carrousel/>
       <div className="tarifas font-poppins p-4">
         <h2 className="text-2xl font-bold text-center mb-5">TARIFAS</h2>
         <div className="cards grid gap-x-10 gap-y-5">
@@ -68,7 +76,7 @@ function Catalogue() {
         </div>
       </div>
       <Catalogues />
-      <Footer/>
+      <Footer />
     </>
   );
 }

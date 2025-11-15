@@ -7,10 +7,19 @@ import {
   doc,
 } from 'firebase/firestore';
 import { db } from '../firebase';
-import Product from '../components/Product';
+import Offer from '../components/Offer';
+import Swal from 'sweetalert2';
+import { warning } from 'framer-motion';
 
 function Offers({ onEdit, onDelete }) {
   const [ofertas, setOfertas] = useState([]);
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
 
   useEffect(() => {
     const q = query(collection(db, 'offers'));
@@ -20,19 +29,40 @@ function Offers({ onEdit, onDelete }) {
     return unsub;
   }, []);
 
-  const handleEdit = (product) => {
-    onEdit(product);
+  const handleDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, 'offers', id));
+      Toast.fire({
+        icon: 'success',
+        title: 'Elemento eliminado correctamente',
+      });
+    } catch (error) {
+      Toast.fire({
+        icon: 'error',
+        title: error,
+      });
+    }
   };
 
-  const handleDelete = async (id) => {
-    if (confirm('¿Seguro que quieres eliminar este producto?')) {
-      try {
-        await deleteDoc(doc(db, 'offers', id));
-        alert('Producto eliminado');
-      } catch (err) {
-        alert('Error al eliminar');
+  function warningSwal(id) {
+    Swal.fire({
+      title: '¿Estás seguro de eliminar este elemento?',
+      text: 'No podrás reveritrlo después',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#5467CF',
+      cancelButtonColor: '#FB2C36',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Si, borrar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(id);
       }
-    }
+    });
+  }
+
+  const handleEdit = async (product) => {
+    onEdit(product);
   };
 
   return (
@@ -45,13 +75,12 @@ function Offers({ onEdit, onDelete }) {
           </p>
         ) : (
           ofertas.map((p) => (
-            <Product
+            <Offer
               key={p.id}
-              producto={p}
-              // type="offer"
+              oferta={p}
               editable={true}
               onEdit={() => handleEdit(p)}
-              onDelete={() => handleDelete(p.id)}
+              onDelete={() => warningSwal(p.id)}
             />
           ))
         )}

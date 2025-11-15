@@ -4,7 +4,7 @@ import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Swal from 'sweetalert2';
-
+import bg from '../assets/img-bg.avif';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,11 +22,11 @@ function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       Toast.fire({
-        icon: "success",
-        title: "Se ha ingresado correctamente"
-      })
-      
-      navigate('/admin')
+        icon: 'success',
+        title: 'Se ha ingresado correctamente',
+      });
+
+      navigate('/admin');
     } catch (err) {
       setError('Error en login: ' + err.message);
     }
@@ -34,8 +34,9 @@ function Login() {
   return (
     <>
       <Navbar page={'LOGIN'} />
-      <div className="login h-screen flex flex-col justify-center items-center">
-        <div className="login-form border-2 flex flex-col border-accent rounded-lg bg-secondary text-primary justify-center py-2 w-2/3 h-2/3 overflow-hidden">
+      <div className="login h-screen flex flex-col justify-center items-center overflow-hidden">
+        <img src={bg} className="w-full absolute -z-10 object-cover" />
+        <div className="login-form relative border-2 flex flex-col border-accent rounded-lg bg-secondary text-primary justify-center py-2 w-2/3 h-2/3 overflow-hidden">
           <h1 className="text-3xl font-bold text-center">Login Admin</h1>
           <form
             onSubmit={handleLogin}

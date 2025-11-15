@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   collection,
   addDoc,
@@ -19,6 +20,7 @@ import Clothes from './Clothes';
 import Offers from './Offers';
 import Supplements from './Supplements';
 import Swal from 'sweetalert2';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 function Dashboard() {
   const [productosClothes, setProductosClothes] = useState([]);
@@ -33,11 +35,11 @@ function Dashboard() {
   const [activeTab, setActiveTab] = useState('clothes');
   const Toast = Swal.mixin({
     toast: true,
-    position: "top-end",
+    position: 'top-end',
     showConfirmButton: false,
     timer: 3000,
-    timerProgressBar: true
-  })
+    timerProgressBar: true,
+  });
 
   const navigate = useNavigate();
 
@@ -68,10 +70,9 @@ function Dashboard() {
     };
   }, []);
 
-
   async function handleSubmit(e) {
     e.preventDefault();
-    
+
     const data = {
       nombre,
       precio: parseFloat(precio),
@@ -83,22 +84,22 @@ function Dashboard() {
     console.log(data, path);
     if (!path) return alert('Selecciona una categoría');
     try {
-      if (editingId && path == 'clothes') {
-        await updateDoc(doc(db, 'clothes', editingId), data);
-        setEditingId(null);
-      } else if (editingId && path == 'supplements') {
-        await updateDoc(doc(db, 'supplements', editingId), data);
-        setEditingId(null);
+      if (editingId && path) {
+        await updateDoc(doc(db, path, editingId), data);
+        Toast.fire({
+          icon: 'success',
+          title: `Producto "${data.nombre}" editado correctamente`,
+        });
       } else {
         await addDoc(collection(db, path), data);
+        Toast.fire({
+          icon: 'success',
+          title: `Producto "${data.nombre}" añadido correctamente al catálogo "${path}"`,
+        });
       }
-      Toast.fire({
-        icon: "success",
-        title: `Producto "${data.nombre}" añadido correctamente al catálogo "${path}"`
-      })
       resetForm();
     } catch (err) {
-      console.error('Error al guardar:', error);
+      console.error('Error al guardar:', err);
       alert('Error al guardar el producto');
     }
   }
@@ -123,15 +124,19 @@ function Dashboard() {
   }
 
   function handleEdit(product) {
-    setNombre(product.nombre);
-    setPrecio(product.precio);
-    setDescripcion(product.descripcion);
-    setImageURL(product.imageURL);
-    setStatus(product.status);
-    setEditingId(product.id);
+    if (path === 'offers') {
+      setNombre(product.nombre);
+      setImageURL(product.imageURL);
+      setEditingId(product.id);
+    } else {
+      setNombre(product.nombre);
+      setPrecio(product.precio);
+      setDescripcion(product.descripcion);
+      setImageURL(product.imageURL);
+      setStatus(product.status);
+      setEditingId(product.id);
+    }
   }
-
-  
 
   return (
     <>
@@ -161,7 +166,7 @@ function Dashboard() {
       <div className="admin">
         <form
           onSubmit={handleSubmit}
-          className="upload-edit flex flex-col justify-center mx-2 my-5 px-4 py-6 bg-accent/70 text-primary rounded-lg"
+          className="upload-edit flex flex-col justify-center mx-2 my-5 px-4 py-6 bg-secondary text-primary rounded-lg"
         >
           <h1 className="text-2xl font-bold text-center mb-5">
             {editingId
@@ -170,8 +175,16 @@ function Dashboard() {
           </h1>
           {path === 'offers' ? (
             <>
+              <label htmlFor="nombre">Nombre</label>
+              <input
+                type="text"
+                name="nombre"
+                className="border-2 bg-primary/90 rounded-lg outline-0 border-primary text-secondary px-2 focus:bg-accent focus:text-primary invalid:border-red-500 transition duration-200"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+              />
               <div className="upload w-full flex justify-center gap-5">
-                <ImageUpload onUpload={setImageURL} />
+                <ImageUpload onUpload={setImageURL} editing={editingId} />
                 {imageURL && (
                   <div className="mt-3 flex flex-col justify-center">
                     Previsualización:
@@ -181,11 +194,24 @@ function Dashboard() {
                       className="h-25 object-cover rounded-lg"
                     />
                   </div>
-                  
                 )}
-                {
-                  setNombre('Oferta')
-                }
+              </div>
+              <div className="buttons flex justify-around gap-2 pt-5">
+                <button
+                  type="submit"
+                  className="w-1/2 bg-primary text-secondary rounded-lg cursor-pointer hover:text-primary hover:bg-sky-600 hover:shadow-sky-600 hover:shadow-uniform transition duration-300 ease-in-out "
+                >
+                  {editingId ? 'Actualizar' : 'Añadir'}
+                </button>
+                {editingId && (
+                  <button
+                    type="button"
+                    className="w-1/2 bg-red-500/60 rounded-lg cursor-pointer hover:bg-red-500 hover:shadow-red-500 hover:shadow-uniform transition duration-300 ease-in-out"
+                    onClick={resetForm}
+                  >
+                    Cancelar
+                  </button>
+                )}
               </div>
             </>
           ) : (
@@ -194,7 +220,7 @@ function Dashboard() {
               <input
                 type="text"
                 name="nombre"
-                className="border-2 bg-primary/90 rounded-lg outline-0 border-primary text-secondary px-2 focus:bg-accent focus:text-primary invalid:border-red-500 transition duration-200"
+                className="border-2 bg-primary/90 rounded-lg outline-0 border-primary text-secondary px-2 focus:bg-accent focus:text-primary  transition duration-200"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 required
@@ -203,7 +229,7 @@ function Dashboard() {
               <input
                 type="number"
                 name="precio"
-                className="border-2 bg-primary/90 rounded-lg outline-0 border-primary text-secondary px-2 focus:bg-accent focus:text-primary invalid:border-red-500 transition duration-200"
+                className="border-2 bg-primary/90 rounded-lg outline-0 border-primary text-secondary px-2 focus:bg-accent focus:text-primary  transition duration-200"
                 value={precio}
                 onChange={(e) => setPrecio(e.target.value)}
                 required
@@ -211,7 +237,7 @@ function Dashboard() {
               <label htmlFor="descripcion">Descripción</label>
               <textarea
                 name="Descripción"
-                className="border-2 bg-primary/90 rounded-lg outline-0 border-primary text-secondary px-2 focus:bg-accent focus:text-primary invalid:border-red-500 transition duration-200"
+                className="border-2 bg-primary/90 rounded-lg outline-0 border-primary text-secondary px-2 focus:bg-accent focus:text-primary  transition duration-200"
                 value={descripcion}
                 onChange={(e) => setDescripcion(e.target.value)}
                 required
@@ -229,7 +255,7 @@ function Dashboard() {
                 <option value="agotado">Agotado</option>
               </select>
               <div className="upload w-full flex justify-center gap-5">
-                <ImageUpload onUpload={setImageURL} editing={editingId}/>
+                <ImageUpload onUpload={setImageURL} editing={editingId} />
                 {imageURL && (
                   <div className="mt-3 flex flex-col justify-center">
                     Previsualización:
@@ -268,13 +294,16 @@ function Dashboard() {
           {activeTab === 'supplements' && (
             <Supplements onEdit={handleEdit} onDelete={() => {}} />
           )}
-          {activeTab === 'offers' && <Offers />}
+          {activeTab === 'offers' && (
+            <Offers onEdit={handleEdit} onDelete={() => {}} />
+          )}
         </div>
         <button
           onClick={logOut}
-          className="bg-red-500 rounded-lg px-4 py-2 text-center"
+          className="bg-orange-500 px-4 py-2 text-center text-primary w-full cursor-pointer"
         >
           Salir
+          <FontAwesomeIcon icon={faSignOutAlt} />
         </button>
       </div>
     </>

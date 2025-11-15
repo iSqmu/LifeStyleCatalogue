@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
-function ImageUpload({ onUpload, editing }) {
+function ImageUpload({ onUpload, editing, req }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
 
@@ -38,7 +38,7 @@ function ImageUpload({ onUpload, editing }) {
   }
   return (
     <>
-      <div className="container relative bg-secondary/80 w-60 h-30 flex justify-center items-center rounded-lg mt-5 overflow-hidden hover:scale-105 transition-all duration-300 ease-in-out">
+      <div className="container relative bg-accent/80 w-60 h-30 flex justify-center items-center rounded-lg mt-5 overflow-hidden hover:scale-105 transition-all duration-300 ease-in-out">
         <label
           htmlFor="file"
           className="absolute z-2 px-5 text-primary font-bold text-center cursor-pointer"
@@ -46,7 +46,7 @@ function ImageUpload({ onUpload, editing }) {
           {uploading ? 'Subiendo...' : 'Arrastra o haz clic'}
         </label>
         <FontAwesomeIcon
-          className="text-6xl text-accent/90 absolute z-1 opacity-60 cursor-pointer"
+          className="text-6xl text-secondary absolute z-1 opacity-60 cursor-pointer"
           icon={faUpload}
         />
         <input
