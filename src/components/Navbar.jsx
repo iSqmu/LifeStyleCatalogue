@@ -1,55 +1,123 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from '../../public/logo.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 function Navbar({ page, links, activeTab, onTabChange, type }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleTabClick = (id) => {
+    onTabChange(id);
+    setIsOpen(false); // Cierra menú en móvil
+  };
+
   return (
-    <nav
-      id="navbar"
-      className="w-full flex h-auto bg-secondary text-primary px-2 py-3 place-items-center"
-    >
-      <a href="/" className="logo flex w-1/3">
-        <img src={logo} alt="Lifestyle Logo" className="size-10" />
+    <nav className="bg-secondary text-primary shadow-lg sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* LOGO + TÍTULO */}
+          <a href="/" className="flex items-center space-x-3 flex-shrink-0">
+            <img src={logo} alt="Lifestyle Logo" className="h-10 w-10" />
+            <div className="flex items-center space-x-2">
+              <h2 className="text-lg sm:text-xl font-bold font-inter">
+                LIFE STYLE
+              </h2>
+              <span className="hidden sm:block w-1 h-8 bg-primary rounded-full"></span>
+              <h2 className="hidden sm:block text-lg sm:text-xl font-bold font-inter">
+                {page}
+              </h2>
+            </div>
+          </a>
 
-        <div className="nav-text flex max-lg:justify-center w-auto gap-2 place-items-center">
-          <h2 className="text-xl font-inter">LIFE STYLE</h2>
-          <span className="separator w-1 h-10 rounded-2xl bg-primary"></span>
-          <h2 className="text-xl font-inter">{page}</h2>
+          {/* BOTÓN HAMBURGUESA (móvil) */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="lg:hidden p-2 rounded-md hover:bg-accent/50 transition cursor-pointer"
+          >
+            <FontAwesomeIcon
+              icon={isOpen ? faTimes : faBars}
+              className="text-xl"
+            />
+          </button>
+
+          {/* ENLACES (desktop) */}
+          <ul className="hidden lg:flex items-center space-x-2">
+            {links?.map((link) => {
+              if (type === 'tab') {
+                return (
+                  <li key={link.id}>
+                    <button
+                      onClick={() => handleTabClick(link.id)}
+                      className={`px-4 py-2 rounded-lg font-bold text-sm transition-all duration-300 relative overflow-hidden
+                        after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300
+                        hover:after:w-full ${
+                          activeTab === link.id
+                            ? 'bg-accent'
+                            : 'hover:bg-accent/50'
+                        } cursor-pointer`}
+                    >
+                      {link.name}
+                    </button>
+                  </li>
+                );
+              }
+              if (type === 'url') {
+                return (
+                  <li key={link.id}>
+                    <a
+                      href={link.url}
+                      className="px-4 py-2 rounded-lg font-bold text-sm hover:bg-accent/50 transition"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                );
+              }
+              return null;
+            })}
+          </ul>
         </div>
-      </a>
-      <ul className="flex w-2/3 justify-end gap-5">
-        {links &&
-          links.map((link) => {
-            // SI ES TIPO TAB → button con onClick
-            if (type === 'tab') {
-              return (
-                <li key={link.id}>
-                  <button
-                    onClick={() => onTabChange(link.id)}
-                    className={`nav-link relative text-primary font-bold after:content-[''] after:w-0 hover:after:w-8/10 after:rounded-full after:h-0.5 after:bg-primary after:absolute after:top-8/10 after:left-1/10 hover:bg-accent after:transition-all after:duration-300 transition-all duration-300 ease-in-out px-4 py-2 rounded-lg cursor-pointer ${
-                      activeTab === link.id ? 'bg-accent' : ''
-                    }`}
-                  >
-                    {link.name}
-                  </button>
-                </li>
-              );
-            }
 
-            // SI ES TIPO URL → <a> normal
-            if (type === 'url') {
-              return (
-                <li
-                  key={link.id}
-                  className="nav-link relative text-primary font-bold after:content-[''] after:w-0 hover:after:w-8/10 after:rounded-full after:h-0.5 after:bg-primary after:absolute after:top-8/10 after:left-1/10 hover:bg-accent after:transition-all after:duration-300 transition-all duration-300 ease-in-out px-4 py-2 rounded-lg"
-                >
-                  <a href={link.url}>{link.name}</a>
-                </li>
-              );
-            }
-
-            return null;
-          })}
-      </ul>
+        {/* MENÚ MÓVIL */}
+        {isOpen && (
+          <div className="lg:hidden pb-4">
+            <ul className="flex flex-col space-y-2 mt-2">
+              {links?.map((link) => {
+                if (type === 'tab') {
+                  return (
+                    <li key={link.id}>
+                      <button
+                        onClick={() => handleTabClick(link.id)}
+                        className={`w-full text-left px-4 py-3 rounded-lg font-bold text-sm transition
+                          ${
+                            activeTab === link.id
+                              ? 'bg-accent'
+                              : 'hover:bg-accent/50'
+                          } cursor-pointer`}
+                      >
+                        {link.name}
+                      </button>
+                    </li>
+                  );
+                }
+                if (type === 'url') {
+                  return (
+                    <li key={link.id}>
+                      <a
+                        href={link.url}
+                        className="block w-full text-left px-4 py-3 rounded-lg font-bold text-sm hover:bg-accent/50"
+                      >
+                        {link.name}
+                      </a>
+                    </li>
+                  );
+                }
+                return null;
+              })}
+            </ul>
+          </div>
+        )}
+      </div>
     </nav>
   );
 }
