@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import Product from '../components/Product';
 import Navbar from '../components/Navbar';
 import ImageUpload from '../components/ImageUpload';
-import Clothes from './clothes';
+import Clothes from './Clothes';
 import Offers from './Offers';
 import Supplements from './Supplements';
 import Swal from 'sweetalert2';
