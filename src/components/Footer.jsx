@@ -7,7 +7,7 @@ function Footer() {
   return (
     <footer className="bg-secondary py-6 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-8">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-6 sm:gap-8">
           {/* Mercado Pago */}
           <img
             src={imagenes.mercadopago}
