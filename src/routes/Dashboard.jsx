@@ -5,13 +5,14 @@ import {
   collection,
   addDoc,
   updateDoc,
+  setDoc,
   deleteDoc,
   doc,
   onSnapshot,
   query,
 } from 'firebase/firestore';
 import { db, auth } from '../firebase';
-import { signOut } from '@firebase/auth';
+import { signOut, signInWithEmailAndPassword } from '@firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import Product from '../components/Product';
 import Navbar from '../components/Navbar';
@@ -33,6 +34,14 @@ function Dashboard() {
   const [path, setPath] = useState('clothes');
   const [editingId, setEditingId] = useState(null);
   const [activeTab, setActiveTab] = useState('clothes');
+  const user = auth.currentUser;
+  setDoc(
+    doc(db, 'admins', user.uid),
+    {
+      admin: true,
+    },
+    { merge: true }
+  );
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -138,6 +147,8 @@ function Dashboard() {
     }
   }
 
+  console.log(user);
+
   return (
     <>
       <Navbar
@@ -164,6 +175,11 @@ function Dashboard() {
         onTabChange={setActiveTab}
       />
       <div className="admin">
+        <h1 className="text-3xl text-secondary font-bold text-center my-5">
+          Bienvenido {user.displayName} al{' '}
+          <span className="text-accent">panel de control</span> de{' '}
+          <span className="text-accent">Life Style</span>
+        </h1>
         <form
           onSubmit={handleSubmit}
           className="upload-edit flex flex-col justify-center mx-2 my-5 px-4 py-6 bg-secondary text-primary rounded-lg"
