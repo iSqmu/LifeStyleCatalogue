@@ -1,16 +1,43 @@
-# React + Vite
+# LifeStyleCatalogue 🛍️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Catálogo web desarrollado para una tienda de elementos deportivos con el objetivo de facilitar la gestión y actualización de sus productos.
 
-Currently, two official plugins are available:
+El proyecto nació a partir de una necesidad real: mantener un catálogo actualizado resultaba poco práctico cuando era necesario editar manualmente un PDF cada vez que un producto quedaba sin inventario o cambiaba su información.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Características
 
-## React Compiler
+* 🛍️ **Catálogo de productos:** visualización de los productos disponibles.
+* 📦 **Gestión de productos:** administración de la información de los productos.
+* 🖼️ **Gestión de imágenes:** almacenamiento y gestión de imágenes mediante Cloudinary.
+* 🔐 **Autenticación:** sistema de usuarios mediante Firebase.
+* 🌐 **Aplicación web desplegada:** disponible mediante Vercel.
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## 🛠️ Tecnologías
 
-## Expanding the ESLint configuration
+* React
+* JavaScript
+* HTML
+* CSS
+* Firebase
+* Cloudinary
+* Vercel
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🔐 Usuarios y almacenamiento
+
+El proyecto utiliza **Firebase** para la gestión de usuarios y la información asociada a los productos.
+
+**Cloudinary** se utiliza para gestionar las imágenes utilizadas dentro del catálogo.
+
+## 💡 Motivación
+
+El proyecto fue desarrollado para solucionar una necesidad concreta de una tienda de elementos deportivos.
+
+La idea principal era reemplazar el uso de catálogos estáticos por una aplicación web en la que la información y las imágenes de los productos pudieran gestionarse de manera más sencilla.
+
+## 🚀 Demo
+
+[Ver aplicación](https://life-style-catalogue.vercel.app/)
+
+## 📂 Repositorio
+
+[Ver código fuente](https://github.com/iSqmu/LifeStyleCatalogue)
